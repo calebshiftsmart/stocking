@@ -23,6 +23,8 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .round svg{width:24px;height:24px}
 .next-btn{flex:1;height:56px;border-radius:28px;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-size:19px;font-weight:700;background:#fff;color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent);transition:background .2s,color .2s;position:relative}
 .next-btn svg{width:22px;height:22px}
+.next-btn:disabled{cursor:default;color:#9AA6B2;box-shadow:inset 0 0 0 2px #D5DCE3}
+.dot-control:disabled{cursor:default}
 .next-btn.ready{background:var(--accent);color:#fff;box-shadow:none;animation:nudge 1.6s ease-in-out infinite}
 .next-btn.ready::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 #4934d680;animation:ring 1.6s ease-out infinite}
 @keyframes ring{0%{box-shadow:0 0 0 0 #4934d670}100%{box-shadow:0 0 0 14px #4934d600}}
@@ -314,11 +316,14 @@ const replayButton=document.getElementById('pepsi-replay');
 const capMain=document.getElementById('cap-main'),capNote=document.getElementById('cap-note');
 const dots=Array.from(playerRoot.querySelectorAll('[data-clip]'));
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let selected=0,start=performance.now(),shownCap='',ready=null;
+let selected=0,start=performance.now(),shownCap='',ready=null,unlocked=0;
 const last=durations.length-1;
 function setReady(done){
  if(done===ready)return;ready=done;
  nextButton.classList.toggle('ready',done);
+ nextButton.disabled=!done;
+ if(done&&selected+1>unlocked)unlocked=selected+1;
+ dots.forEach((b,i)=>{b.disabled=i>unlocked;});
  nextLabel.textContent=selected===last?'Start over':'Next';
  nextButton.setAttribute('aria-label',selected===last?'Start over from slide 1':'Next slide');
 }
@@ -335,14 +340,14 @@ function draw(now){
  dots.forEach((b,i)=>b.style.setProperty('--fill',String(i<selected?1:i>selected?0:elapsed/durations[selected])));
  setReady(elapsed>=durations[selected]-.15);
 }
-function go(i){if(i<0||i>last)return;selected=i;start=performance.now();refresh();draw(start);}
+function go(i){if(i<0||i>last||i>unlocked&&i!==0)return;selected=i;start=performance.now();refresh();draw(start);}
 function loop(now){if(window.exporting)return;draw(now);requestAnimationFrame(loop);}
 prevButton.addEventListener('click',()=>go(selected-1));
 nextButton.addEventListener('click',()=>go(selected===last?0:selected+1));
 replayButton.addEventListener('click',()=>go(selected));
 canvas.addEventListener('click',()=>go(selected));
 dots.forEach(b=>b.addEventListener('click',()=>go(Number(b.dataset.clip))));
-document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')go(selected-1);if(e.key==='ArrowRight')go(selected===last?0:selected+1);});
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')go(selected-1);if(e.key==='ArrowRight'&&ready)go(selected===last?0:selected+1);});
 refresh();draw(performance.now());requestAnimationFrame(loop);
 </script>
 </div>
