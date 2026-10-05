@@ -1,48 +1,57 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Stocking Shift Guide</title><style>body{margin:16px;background:#fff}@media(max-width:400px){body{margin:8px}}</style></head><body><div id="pepsi-onboarding">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#F8F5EC"><title>Stocking Shift Guide</title>
 <style>
-#pepsi-onboarding{max-width:600px;margin:auto;font-family:Arial,sans-serif;color:#102f46;background:#F8F5EC;border-radius:24px;overflow:hidden}
+:root{--bg:#F8F5EC;--ink:#102F46;--mint:#DEF0DC;--accent:#4934d6;--track:#c8d6eb;--muted:#5B6B78;color-scheme:light}
+html,body{margin:0;background:var(--bg)}
+body{padding-block:24px;padding-inline:16px}
+#pepsi-onboarding{box-sizing:border-box;max-width:600px;margin:auto;font-family:Arial,sans-serif;color:var(--ink);background:var(--bg);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 0 #e6e0cf,0 8px 30px #102f4614}
 #pepsi-onboarding canvas{display:block;width:100%;height:auto}
-#pepsi-onboarding .player-footer{display:flex;align-items:center;padding:0 8px 8px}
-#pepsi-onboarding .pause-row{height:44px;display:flex;align-items:center;justify-content:flex-end;order:2}
-#pepsi-onboarding button{box-sizing:border-box;appearance:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;border:0;font:inherit;background:transparent;color:inherit;flex-shrink:0}
-#pepsi-onboarding button:focus-visible{outline:3px solid #4934d6;outline-offset:3px}
-#pepsi-onboarding button:disabled{opacity:.3;cursor:default}
-#pepsi-onboarding .pause-control{position:relative;width:44px;height:44px;border-radius:50%;color:#fff}
-#pepsi-onboarding .pause-control::before{content:'';position:absolute;inset:7px;border-radius:50%;background:#4934d6}
-#pepsi-onboarding .pause-glyph{position:relative;display:flex;gap:4px}
-#pepsi-onboarding .pause-glyph span{width:3px;height:12px;background:currentColor;border-radius:2px}
-#pepsi-onboarding .play-glyph{position:relative;display:none;width:0;height:0;margin-left:2px;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:9px solid currentColor}
-#pepsi-onboarding .is-paused .pause-glyph{display:none}
-#pepsi-onboarding .is-paused .play-glyph{display:block}
-#pepsi-onboarding .slide-navigation{display:flex;flex:1;min-width:0;align-items:center;justify-content:center;gap:10px;min-height:44px}
-#pepsi-onboarding .arrow-control{width:44px;height:44px}
-#pepsi-onboarding .chevron{width:8px;height:8px;border-top:2px solid currentColor;border-right:2px solid currentColor;transform:rotate(45deg)}
-#pepsi-onboarding .previous .chevron{transform:rotate(-135deg)}
-#pepsi-onboarding .progress-dots{display:flex;min-width:0;align-items:center;justify-content:center}
-#pepsi-onboarding .dot-control{height:44px;width:28px;--fill:0}
-#pepsi-onboarding .dot-control[data-active="true"]{width:48px}
-#pepsi-onboarding .dot-track{display:block;width:8px;height:8px;border-radius:9px;background:#c8d6eb;overflow:hidden;transition:width .16s ease}
-#pepsi-onboarding .dot-control[data-active="true"] .dot-track{width:36px}
-#pepsi-onboarding .dot-fill{display:block;width:100%;height:100%;background:#4934d6;border-radius:inherit;transform:scaleX(var(--fill));transform-origin:left}
-@media(pointer:coarse){#pepsi-onboarding .dot-control{width:44px;flex-shrink:1}#pepsi-onboarding .dot-control[data-active="true"]{width:44px}#pepsi-onboarding .slide-navigation{gap:0}}
-@media(prefers-reduced-motion:reduce){#pepsi-onboarding .dot-track{transition:none}}
-</style>
-<canvas id="pepsi-canvas" width="600" height="630" role="img" aria-label="Stocking shift animations"></canvas>
-<div class="player-footer">
- <div class="pause-row"><button id="pepsi-play" class="pause-control" type="button" aria-label="Pause animations"><span class="pause-glyph" aria-hidden="true"><span></span><span></span></span><span class="play-glyph" aria-hidden="true"></span></button></div>
- <nav class="slide-navigation" aria-label="Animation navigation">
-  <button id="pepsi-prev" class="arrow-control previous" type="button" aria-label="Previous animation"><span class="chevron" aria-hidden="true"></span></button>
-  <div class="progress-dots" aria-label="Choose an animation">
-   <button class="dot-control" data-clip="0" data-active="true" type="button" aria-label="Locate delivery animation" aria-current="step"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
-   <button class="dot-control" data-clip="1" data-active="false" type="button" aria-label="Stocking animation"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
-   <button class="dot-control" data-clip="2" data-active="false" type="button" aria-label="Task list animation"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
-   <button class="dot-control" data-clip="3" data-active="false" type="button" aria-label="Photo animation"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
-   <button class="dot-control" data-clip="4" data-active="false" type="button" aria-label="Cart order animation"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
-   <button class="dot-control" data-clip="5" data-active="false" type="button" aria-label="Backstock animation"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
-   <button class="dot-control" data-clip="6" data-active="false" type="button" aria-label="Important reminders animation"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
-  </div>
-  <button id="pepsi-next" class="arrow-control" type="button" aria-label="Next animation"><span class="chevron" aria-hidden="true"></span></button>
- </nav>
+.caption{margin:4px 16px 0;padding:14px 20px;background:var(--mint);border-radius:22px;text-align:center;min-height:52px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.cap-main{margin:0;font-size:19px;line-height:1.3;font-weight:600;text-wrap:balance}
+.cap-note{margin:2px 0 0;font-size:15px;line-height:1.3;color:var(--muted);text-wrap:balance}
+.spacer{flex:1;min-height:16px}.spacer.top{min-height:0}
+.progress-dots{display:flex;justify-content:center;align-items:center;padding:0 16px}
+button{box-sizing:border-box;appearance:none;cursor:pointer;font:inherit;border:0;background:transparent;color:inherit;padding:0;-webkit-tap-highlight-color:transparent}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.dot-control{height:32px;width:26px;display:inline-flex;align-items:center;justify-content:center;--fill:0}
+.dot-control[data-active="true"]{width:46px}
+.dot-track{display:block;width:8px;height:8px;border-radius:9px;background:var(--track);overflow:hidden;transition:width .16s ease}
+.dot-control[data-active="true"] .dot-track{width:36px}
+.dot-fill{display:block;width:100%;height:100%;background:var(--accent);border-radius:inherit;transform:scaleX(var(--fill));transform-origin:left}
+.controls{display:flex;gap:10px;align-items:center;padding:8px 16px 16px}
+.round{width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;background:#fff;color:var(--ink);box-shadow:inset 0 0 0 2px #dfe5ec}
+.round:disabled{opacity:.35;cursor:default}
+.round svg{width:24px;height:24px}
+.next-btn{flex:1;height:56px;border-radius:28px;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-size:19px;font-weight:700;background:#fff;color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent);transition:background .2s,color .2s;position:relative}
+.next-btn svg{width:22px;height:22px}
+.next-btn.ready{background:var(--accent);color:#fff;box-shadow:none;animation:nudge 1.6s ease-in-out infinite}
+.next-btn.ready::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 #4934d680;animation:ring 1.6s ease-out infinite}
+@keyframes ring{0%{box-shadow:0 0 0 0 #4934d670}100%{box-shadow:0 0 0 14px #4934d600}}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
+@media(max-width:640px){
+ body{padding:0}
+ #pepsi-onboarding{max-width:none;border-radius:0;box-shadow:none;min-height:100vh;min-height:100dvh;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+ .controls{padding-bottom:20px}
+ .cap-main{font-size:20px}
+}
+@media(prefers-reduced-motion:reduce){.next-btn.ready,.next-btn.ready::after{animation:none}.dot-track{transition:none}}
+</style></head><body><div id="pepsi-onboarding">
+<div class="spacer top"></div>
+<canvas id="pepsi-canvas" width="1120" height="1030" role="img" aria-label="Stocking shift animation"></canvas>
+<div class="caption" aria-live="polite"><p class="cap-main" id="cap-main"></p><p class="cap-note" id="cap-note" hidden></p></div>
+<div class="spacer"></div>
+<div class="progress-dots" aria-label="Slides">
+   <button class="dot-control" data-clip="0" type="button" aria-label="Go to slide 1: Locate delivery"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
+   <button class="dot-control" data-clip="1" type="button" aria-label="Go to slide 2: Stocking"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
+   <button class="dot-control" data-clip="2" type="button" aria-label="Go to slide 3: Task list"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
+   <button class="dot-control" data-clip="3" type="button" aria-label="Go to slide 4: Photo"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
+   <button class="dot-control" data-clip="4" type="button" aria-label="Go to slide 5: Cart order"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
+   <button class="dot-control" data-clip="5" type="button" aria-label="Go to slide 6: Backstock"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
+   <button class="dot-control" data-clip="6" type="button" aria-label="Go to slide 7: Important reminders"><span class="dot-track" aria-hidden="true"><span class="dot-fill"></span></span></button>
+</div>
+<div class="controls">
+ <button id="pepsi-prev" class="round" type="button" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+ <button id="pepsi-replay" class="round" type="button" aria-label="Replay this slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/></svg></button>
+ <button id="pepsi-next" class="next-btn" type="button"><span id="next-label">Next</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
 </div>
 <script>
 const canvas = document.getElementById('pepsi-canvas');
@@ -50,7 +59,6 @@ const ctx = canvas.getContext('2d');
 const C={bg:'#F8F5EC',ink:'#102F46',blue:'#0863D8',pale:'#DFEAF5',green:'#23775D',mint:'#DEF0DC',red:'#ED6A52',yellow:'#F5D66F',shelf:'#B6C4CA',white:'#FFFFFF'};
 const titles=[['Find your delivery','in the soda aisle.'],['Stock as much','as you can.'],['Use your task list','to know what goes here.'],['One photo per','4-foot section.'],['After soda,','stock the cart top-down'],['All remaining products','go on the backstock cart.'],['Speed is','everything.']];
 const durations=[6.5,6.7,7.5,9.5,7.1,7,6.5];
-let selected=0, playing=!matchMedia('(prefers-reduced-motion: reduce)').matches, start=performance.now(), held=0;
 function rect(x,y,w,h,color,r=0){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();}
 function line(x,y,x2,y2,color,width=3){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x2,y2);ctx.stroke();}
 function txt(s,x,y,size=20,color=C.ink,weight=500,align='left'){ctx.fillStyle=color;ctx.font=`${weight} ${size}px Arial, sans-serif`;ctx.textAlign=align;ctx.fillText(s,x,y);}
@@ -81,13 +89,8 @@ function pack(x,y,id=0,size=54){
 function box(x,y,id=0,s=1){pack(x,y,typeof id==='number'?id:0,58*s);}
 function cart(x,y,w=126,label=''){line(x+12,y-117,x+12,y,C.ink,6);line(x+12,y-117,x+29,y-117,C.ink,6);rect(x,y,w,12,C.yellow,5);circ(x+23,y+22,11,C.ink);circ(x+w-20,y+22,11,C.ink);circ(x+23,y+22,4,C.shelf);circ(x+w-20,y+22,4,C.shelf);if(label)txt(label,x+w/2,y+55,16,C.ink,700,'center');}
 function shelf(x,y,w=350,sections=1){rect(x,y,w,229,'#E9EEEB',10);for(let a=0;a<sections+1;a++){let xx=x+a*w/sections;rect(xx,y,7,235,C.shelf,2);for(let d=12;d<217;d+=14)circ(xx+3.5,y+d,1.2,'#7D929E');}for(let row=0;row<3;row++){rect(x,y+65+row*73,w,10,C.shelf,2);for(let j=0;j<sections*2;j++)rect(x+18+j*(w/(sections*2)),y+68+row*73,27,6,C.white,1);}}
-function caption(a,b='',note=''){
- const y=note?560:578,h=b?76:58;
- rect(26,y,548,h,C.mint,h/2);
- txt(a,300,y+(b?30:36),21,C.ink,500,'center');
- if(b)txt(b,300,y+57,21,C.ink,500,'center');
- if(note)txt(note,300,657,16,C.ink,400,'center');
-}
+let capNow=['','',''];
+function caption(a,b='',note=''){capNow=[a,b,note];}
 function outline(x,y,w,h,color=C.blue,width=3){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash([]);ctx.strokeRect(x,y,w,h);}
 function photoFrame(x,y,w,h,flash=false){ctx.strokeStyle=C.blue;ctx.lineWidth=5;ctx.setLineDash([15,8]);ctx.strokeRect(x,y,w,h);ctx.setLineDash([]);if(flash)rect(x,y,w,h,'#FFFFFFBB',5);rect(x+w/2-21,y+h-23,42,32,C.blue,7);circ(x+w/2,y+h-7,9,C.white);circ(x+w/2,y+h-7,5,C.blue);}
 function scene0(t){
@@ -302,64 +305,45 @@ function sceneReminders(t){
  });
  caption('Speed beats perfect. Just get it off the cart!');
 }
-window.renderFrame=function(index,t){ctx.clearRect(0,0,600,652);rect(0,0,600,652,C.bg,24);ctx.save();ctx.translate(0,-48);txt(titles[index][0],36,108,43,C.ink,700);txt(titles[index][1],36,157,43,C.ink,700);[sceneDelivery,scene0,sceneTaskList,scene1,scene2,scene3,sceneReminders][index](t);ctx.restore();};
+window.renderFrame=function(index,t){ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);ctx.scale(2,2);rect(0,0,560,515,C.bg);ctx.save();ctx.translate(-20,-48);txt(titles[index][0],36,108,43,C.ink,700);txt(titles[index][1],36,157,43,C.ink,700);[sceneDelivery,scene0,sceneTaskList,scene1,scene2,scene3,sceneReminders][index](t);ctx.restore();};
 const playerRoot=document.getElementById('pepsi-onboarding');
-const pauseButton=document.getElementById('pepsi-play');
-const previousButton=document.getElementById('pepsi-prev');
+const prevButton=document.getElementById('pepsi-prev');
 const nextButton=document.getElementById('pepsi-next');
+const nextLabel=document.getElementById('next-label');
+const replayButton=document.getElementById('pepsi-replay');
+const capMain=document.getElementById('cap-main'),capNote=document.getElementById('cap-note');
 const dots=Array.from(playerRoot.querySelectorAll('[data-clip]'));
-const holdSeconds=1;
-function elapsedAt(now){return playing?(now-start)/1000:held;}
-function refreshPlayer(){
- previousButton.disabled=selected===0;
- nextButton.disabled=selected===durations.length-1;
- pauseButton.classList.toggle('is-paused',!playing);
- pauseButton.setAttribute('aria-label',playing?'Pause animations':'Play animations');
- dots.forEach((button,index)=>{
-  button.dataset.active=String(index===selected);
-  button.setAttribute('aria-current',index===selected?'step':'false');
- });
- canvas.setAttribute('aria-label',titles[selected].join(' '));
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let selected=0,start=performance.now(),shownCap='',ready=null;
+const last=durations.length-1;
+function setReady(done){
+ if(done===ready)return;ready=done;
+ nextButton.classList.toggle('ready',done);
+ nextLabel.textContent=selected===last?'Start over':'Next';
+ nextButton.setAttribute('aria-label',selected===last?'Start over from slide 1':'Next slide');
 }
-function showAt(now){
- let elapsed=Math.max(0,elapsedAt(now));
- let changed=false;
- while(playing&&elapsed>=durations[selected]+holdSeconds){
-  elapsed-=durations[selected]+holdSeconds;
-  selected=(selected+1)%durations.length;
-  start=now-elapsed*1000;
-  changed=true;
- }
- if(changed)refreshPlayer();
- window.renderFrame(selected,Math.min(elapsed,durations[selected]));
- dots.forEach((button,index)=>{
-  const amount=index<selected?1:index>selected?0:Math.min(1,elapsed/durations[selected]);
-  button.style.setProperty('--fill',String(amount));
- });
+function refresh(){
+ prevButton.disabled=selected===0;
+ dots.forEach((b,i)=>{b.dataset.active=String(i===selected);b.setAttribute('aria-current',i===selected?'step':'false');});
+ ready=null;setReady(false);
 }
-function selectClip(index){
- if(index<0||index>=durations.length)return;
- selected=index;start=performance.now();held=0;
- refreshPlayer();showAt(start);
+function draw(now){
+ const elapsed=reduced?durations[selected]:Math.min((now-start)/1000,durations[selected]);
+ window.renderFrame(selected,elapsed);
+ const key=capNow.join('|');
+ if(key!==shownCap){shownCap=key;capMain.textContent=capNow[1]?capNow[0]+' '+capNow[1]:capNow[0];capNote.textContent=capNow[2];capNote.hidden=!capNow[2];canvas.setAttribute('aria-label',titles[selected].join(' ')+'. '+capMain.textContent);}
+ dots.forEach((b,i)=>b.style.setProperty('--fill',String(i<selected?1:i>selected?0:elapsed/durations[selected])));
+ setReady(elapsed>=durations[selected]-.15);
 }
-function togglePlaying(){
- const now=performance.now();
- if(playing){showAt(now);held=elapsedAt(now);playing=false;}
- else{start=now-held*1000;playing=true;}
- refreshPlayer();showAt(now);
-}
-function frame(now){if(window.exporting)return;showAt(now);requestAnimationFrame(frame);}
-previousButton.addEventListener('click',()=>selectClip(selected-1));
-nextButton.addEventListener('click',()=>selectClip(selected+1));
-dots.forEach(button=>button.addEventListener('click',()=>selectClip(Number(button.dataset.clip))));
-pauseButton.addEventListener('click',togglePlaying);
-playerRoot.addEventListener('keydown',event=>{
- if(event.key==='ArrowLeft'||event.key==='ArrowRight'){
-  event.preventDefault();selectClip(selected+(event.key==='ArrowLeft'?-1:1));
- }
-});
-refreshPlayer();showAt(performance.now());requestAnimationFrame(frame);
-
+function go(i){if(i<0||i>last)return;selected=i;start=performance.now();refresh();draw(start);}
+function loop(now){if(window.exporting)return;draw(now);requestAnimationFrame(loop);}
+prevButton.addEventListener('click',()=>go(selected-1));
+nextButton.addEventListener('click',()=>go(selected===last?0:selected+1));
+replayButton.addEventListener('click',()=>go(selected));
+canvas.addEventListener('click',()=>go(selected));
+dots.forEach(b=>b.addEventListener('click',()=>go(Number(b.dataset.clip))));
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')go(selected-1);if(e.key==='ArrowRight')go(selected===last?0:selected+1);});
+refresh();draw(performance.now());requestAnimationFrame(loop);
 </script>
 </div>
 </body></html>
